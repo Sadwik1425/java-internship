@@ -1,0 +1,29 @@
+import java.util.Scanner;
+class intern {
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        System.out.println("Enter the number :");
+        int a=sc.nextInt();
+        if(a%2==0)
+        {
+            System.out.println("Even number");
+        }
+        else{
+            System.out.println("Odd number");
+        }
+    }
+}
+
+
+
+   Interview questions answers
+   1.Modulo operator used in java to find out the remainder of given number.
+   2.If and Else statements are used to check the condition whether it is true or false.
+   3.Scanner is used to read the input from the user.
+   4.We use the nextInt() method to get integer input from the user.
+   5.Byte , Short , Int ,Long are all the data types used for numeric values in java.
+   6.Yes if condition can hava multiple logical expressions.
+   7.Input mismatch Exception is displayed if non negattive number entered.
+   8.The remainder will have the same sign of left operand.
+   9.Default value of integer in java is "0" value.
+   10.Yes can extend an Even/Odd checker to keep running until the user chooses to exit by using a loop like while or do-while and asking the user each time whether to continue.
