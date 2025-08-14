@@ -1,0 +1,111 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// Student class
+class Student {
+     int id;
+    String name;
+     double grade;
+
+    // Constructor
+    public Student(int id, String name, double grade) {
+        this.id = id;
+        this.name = name;
+        this.grade = grade;
+    }
+
+    // Getter for ID (needed for removing)
+    public int getId() {
+        return id;
+    }
+
+    // toString method for displaying details
+    @Override
+    public String toString() {
+        return "ID: " + id + ", Name: " + name + ", Grade: " + grade;
+    }
+}
+
+// Main class
+public class StudentManagement {
+    private static ArrayList<Student> students = new ArrayList<>();
+    private static Scanner sc = new Scanner(System.in);
+
+    // Add student method
+    public static void addStudent() {
+        System.out.print("Enter ID: ");
+        int id = sc.nextInt();
+        sc.nextLine(); // consume newline
+
+        System.out.print("Enter Name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Enter Grade: ");
+        double grade = sc.nextDouble();
+
+        students.add(new Student(id, name, grade));
+        System.out.println("✅ Student added successfully!");
+    }
+
+    // Remove student method
+    public static void removeStudent() {
+        System.out.print("Enter ID to remove: ");
+        int id = sc.nextInt();
+
+        boolean removed = students.removeIf(s -> s.getId() == id);
+        if (removed) {
+            System.out.println("✅ Student removed successfully!");
+        } else {
+            System.out.println("⚠ No student found with ID " + id);
+        }
+    }
+
+    // Display students method
+    public static void displayStudents() {
+        if (students.isEmpty()) {
+            System.out.println("⚠ No students to display.");
+        } else {
+            System.out.println("\n📜 Student List:");
+            for (Student s : students) {
+                System.out.println(s);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        int choice;
+        do {
+            System.out.println("\n===== Student Management Menu =====");
+            System.out.println("1. Add Student");
+            System.out.println("2. Remove Student");
+            System.out.println("3. Display Students");
+            System.out.println("4. Exit");
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1 -> addStudent();
+                case 2 -> removeStudent();
+                case 3 -> displayStudents();
+                case 4 -> System.out.println("👋 Exiting... Goodbye!");
+                default -> System.out.println("⚠ Invalid choice, try again.");
+            }
+        } while (choice != 4);
+    }
+}
+
+
+       Interview questions
+
+    1.class is blue print of creating object.
+    2.A class is a blueprint for creating objects, and an object is an actual instance of that blueprint with real data.
+    3.An array has a fixed size and stores elements of the same type, while an ArrayList is resizable and provides built-in methods to add, remove, and manage elements dynamically.
+    4.Hiding the object data using private and data can be accessed using get and set methods is known as Encapsulation.
+    5.method name same as class name with creating constructors and no return type and creating object with new keyword.
+    6.Same method  name with different parameters is known as method overloading.
+    7.Remove method delete the elements from the arraylist  by indexing .
+    8.tostring method make the data into redable format.
+    9.Arraylist can be resizable and easy to remove or add the elements.
+   10.ArrayList for fast access, and LinkedList for fast insertions/deletions.
+
+                      
