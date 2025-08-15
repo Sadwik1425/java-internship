@@ -1,0 +1,51 @@
+import java.util.*;
+
+class Employee {
+    String name;
+    int age;
+    double salary;
+
+    Employee(String name, int age, double salary) {
+        this.name = name;
+        this.age = age;
+        this.salary = salary;
+    }
+
+    @Override
+    public String toString() {
+        return name + " | Age: " + age + " | Salary: " + salary;
+    }
+}
+
+public class EmployeeTest {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+            new Employee("John", 30, 50000),
+            new Employee("Alice", 25, 70000),
+            new Employee("Bob", 28, 60000)
+        );
+
+        // Sort by salary (desc)
+        employees.sort((e1, e2) -> Double.compare(e2.salary, e1.salary));
+        System.out.println("Sorted by Salary (Desc):");
+        employees.forEach(System.out::println);
+
+        // Sort by name (asc)
+        employees.sort(Comparator.comparing(e -> e.name));
+        System.out.println("\nSorted by Name (Asc):");
+        employees.forEach(System.out::println);
+    }
+}
+
+
+           Interview questios
+  1.A Comparator in Java is an interface used to define custom rules for comparing and sorting objects.
+  2.Comparable defines a class’s natural sorting order, while Comparator defines custom sorting outside the class.
+  3.Collections.sort() sorts a list using natural order or a provided Comparator.
+  4.Sort objects in descending order by using Collections.sort(list, comparator.reversed()).
+  5.ArrayList is faster for random access, while LinkedList is faster for insertions and deletions.
+  6.compare(o1, o2) returns negative if o1 < o2, zero if equal, and positive if o1 > o2.
+  7.Yes, by creating a copy of the list and sorting the copy instead of the original.
+  8.A lambda expression in Java sorting is a concise way to define a Comparator inline for custom ordering.
+  9. Sort multiple fields by chaining Comparators using thenComparing().
+  10.A List is preferred for dynamic data because it can grow or shrink in size at runtime without manual resizing.
