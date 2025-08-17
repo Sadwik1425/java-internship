@@ -1,0 +1,59 @@
+import java.io.*;
+
+public class ProductFilter {
+    public static void main(String[] args) {
+        String inputFile = "products.csv";
+        String outputFile = "filtered_products.csv";
+
+        // Step 1: Create a sample CSV file
+        try (FileWriter fw = new FileWriter(inputFile)) {
+            fw.write("Laptop,55000\n");
+            fw.write("Mouse,500\n");
+            fw.write("Keyboard,1500\n");
+            fw.write("Monitor,9000\n");
+            fw.write("USB Cable,300\n");
+            fw.write("Smartphone,45000\n");
+        } catch (IOException e) {
+            System.out.println("Error creating sample file: " + e.getMessage());
+            return;
+        }
+
+        // Step 2: Read using BufferedReader
+        try (BufferedReader br = new BufferedReader(new FileReader(inputFile));
+             FileWriter writer = new FileWriter(outputFile)) {
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+
+                if (parts.length == 2) {
+                    String name = parts[0];
+                    double price = Double.parseDouble(parts[1]);
+
+                    // Step 3: Check condition
+                    if (price > 1000) {
+                        writer.write(name + "," + price + "\n");
+                    }
+                }
+            }
+
+            System.out.println("✅ Products with price > 1000 written to " + outputFile);
+
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}
+
+
+         Interview questions
+         1.BufferedReader in Java is a class used to read text from an input stream efficiently.
+         2.Scanner and bufferreader is the approaches to read file line by line.
+         3.FileReader reads characters directly from a file one by one, while BufferedReader wraps around a Reader (like FileReader) to read text efficiently with buffering and provides readLine() for line-by-line reading.
+         4.can write data to a file using FileWriter, BufferedWriter, or PrintWriter.
+         5.FileWriter in Java is a class from the java.io package that is used to write text (characters) to a file.
+         6.exceptions in file operations (like reading/writing) are usually handled with try-catch blocks, and sometimes try-with-resources for automatic closing.
+         7.Parsing in Java means reading and converting data (usually text) into a usable format that your program can understand (like numbers, objects, or structured data).
+         8.can split a string using the split() method of the String class.
+         9.File.exists() method to check if a file exists in Java.
+         10.If a file does not exist, opening it for reading throws FileNotFoundException, while opening it for writing creates a new empty file.
