@@ -1,0 +1,48 @@
+import java.io.*;
+
+// Custom exception
+class InvalidProductDataException extends Exception {
+    InvalidProductDataException(String msg) { super(msg); }
+}
+
+public class CSVReaderShort {
+    public static void main(String[] args) {
+        try (BufferedReader br = new BufferedReader(new FileReader("products.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                try {
+                    String[] parts = line.split(",");
+                    if (parts.length != 2)
+                        throw new InvalidProductDataException("Invalid row: " + line);
+
+                    String name = parts[0].trim();
+                    double price = Double.parseDouble(parts[1].trim());
+
+                    System.out.println("Product: " + name + " | Price: " + price);
+
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid price format in: " + line);
+                } catch (InvalidProductDataException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found!");
+        } catch (IOException e) {
+            System.err.println("Read error: " + e.getMessage());
+        }
+    }
+}
+
+
+  Interview questions
+1.Exception handling is a mechanism to handle runtime errors gracefully, ensuring program flow continues without crashing.
+2.Checked exceptions Checked at compile time; Unchecked → occur at runtime.
+3.try-catch-finally  try detects, catch handles, finally always executes.
+4.throw  actually throws an exception; throws → declares exceptions a method may throw.
+5.Custom exception  Create class extending Exception or RuntimeException.
+6.Unhandled exception  Program terminates and JVM prints stack trace.
+7.finally  Ensures cleanup code executes always.
+8.NumberFormatException  Thrown when converting invalid string to number.
+9.Closing resources  Use finally or try-with-resources.
+10.Multiple catch blocks  Handle different exceptions with separate logic.
