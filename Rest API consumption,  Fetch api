@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      margin-bottom: 8px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    li button {
+      background: #dc3545;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    li button:hover {
+      background: #b02a37;
+    }
+    form {
+      display: flex;
+      margin-top: 20px;
+    }
+    form input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px 0 0 8px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+    form button {
+      padding: 10px 20px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 0 8px 8px 0;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    form button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Task List</h1>
+
+    <ul id="taskList"></ul>
+
+    <form id="taskForm">
+      <input type="text" id="taskInput" placeholder="Enter new task" required>
+      <button type="submit">Add</button>
+    </form>
+  </div>
+
+  <script>
+    const taskList = document.getElementById('taskList');
+    const taskForm = document.getElementById('taskForm');
+    const taskInput = document.getElementById('taskInput');
+
+    // Fetch tasks from API and render
+    async function fetchTasks() {
+      try {
+        const res = await fetch('/tasks');
+        const tasks = await res.json();
+
+        taskList.innerHTML = '';
+        tasks.forEach(task => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <span>${task.title}</span>
+            <button onclick="deleteTask(${task.id})">Delete</button>
+          `;
+          taskList.appendChild(li);
+        });
+      } catch (err) {
+        console.error('Error fetching tasks:', err);
+      }
+    }
+
+    // Handle form submit
+    taskForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const newTask = taskInput.value.trim();
+      if (!newTask) return;
+
+      try {
+        await fetch('/tasks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: newTask })
+        });
+        taskInput.value = '';
+        fetchTasks(); // Refresh task list dynamically
+      } catch (err) {
+        console.error('Error adding task:', err);
+      }
+    });
+
+    // Delete task
+    async function deleteTask(id) {
+      try {
+        await fetch(`/tasks/${id}`, {
+          method: 'DELETE'
+        });
+        fetchTasks();
+      } catch (err) {
+        console.error('Error deleting task:', err);
+      }
+    }
+
+    // Initial fetch
+    fetchTasks();
+  </script>
+</body>
+</html>
+
+           Interview questions
+1.Fetch API in JavaScript is used to make HTTP requests to servers and handle responses.
+2.You send data to a REST API using fetch() with method: "POST" and body: JSON.stringify(data).
+3.JSON is a text-based data format, while JavaScript objects are in-memory key-value structures.
+4.DOM manipulation means modifying HTML elements, attributes, or styles dynamically with JavaScript.
+5.Asynchronous requests are handled using callbacks, promises, or async/await.
+6.GET retrieves data, while POST sends data to create or update resources.
+7.Handle API errors using try...catch, .catch(), or by checking response.ok.
+8.CORS allows cross-origin requests; it’s handled via backend headers like Access-Control-Allow-Origin.
+9.Promises represent eventual completion (or failure) of an asynchronous operation.
+10.Update UI dynamically without reloading using DOM updates with JavaScript (e.g., innerHTML, append, etc.).
