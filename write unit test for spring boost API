@@ -1,0 +1,149 @@
+package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+// ===== MAIN APP =====
+@SpringBootApplication
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}
+
+// ===== MODEL =====
+class Task {
+    private Long id;
+    private String name;
+
+    public Task() {}
+    public Task(Long id, String name) { this.id = id; this.name = name; }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+}
+
+// ===== SERVICE =====
+@Service
+class TaskService {
+    private final Map<Long, Task> taskRepo = new HashMap<>();
+
+    public List<Task> getAllTasks() { return new ArrayList<>(taskRepo.values()); }
+    public Task getTaskById(Long id) { return taskRepo.get(id); }
+    public Task createTask(Task task) { taskRepo.put(task.getId(), task); return task; }
+    public Task updateTask(Long id, Task updatedTask) { taskRepo.put(id, updatedTask); return updatedTask; }
+    public void deleteTask(Long id) { taskRepo.remove(id); }
+}
+
+// ===== CONTROLLER =====
+@RestController
+@RequestMapping("/tasks")
+class TaskController {
+    private final TaskService taskService;
+    public TaskController(TaskService taskService) { this.taskService = taskService; }
+
+    @GetMapping public List<Task> getAllTasks() { return taskService.getAllTasks(); }
+    @GetMapping("/{id}") public Task getTaskById(@PathVariable Long id) { return taskService.getTaskById(id); }
+    @PostMapping public Task createTask(@RequestBody Task task) { return taskService.createTask(task); }
+    @PutMapping("/{id}") public Task updateTask(@PathVariable Long id, @RequestBody Task task) { return taskService.updateTask(id, task); }
+    @DeleteMapping("/{id}") public void deleteTask(@PathVariable Long id) { taskService.deleteTask(id); }
+}
+
+package com.example.demo;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Arrays;
+
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@WebMvcTest(TaskController.class)
+class TaskControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private TaskService taskService;
+
+    @Test
+    void testGetAllTasks() throws Exception {
+        when(taskService.getAllTasks()).thenReturn(
+                Arrays.asList(new Task(1L, "Task 1"), new Task(2L, "Task 2"))
+        );
+
+        mockMvc.perform(get("/tasks"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].name").value("Task 1"));
+    }
+
+    @Test
+    void testGetTaskById() throws Exception {
+        when(taskService.getTaskById(1L)).thenReturn(new Task(1L, "Sample Task"));
+
+        mockMvc.perform(get("/tasks/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Sample Task"));
+    }
+
+    @Test
+    void testCreateTask() throws Exception {
+        Task newTask = new Task(1L, "New Task");
+        when(taskService.createTask(newTask)).thenReturn(newTask);
+
+        mockMvc.perform(post("/tasks")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"id\":1,\"name\":\"New Task\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("New Task"));
+    }
+
+    @Test
+    void testUpdateTask() throws Exception {
+        Task updatedTask = new Task(1L, "Updated Task");
+        when(taskService.updateTask(1L, updatedTask)).thenReturn(updatedTask);
+
+        mockMvc.perform(put("/tasks/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"id\":1,\"name\":\"Updated Task\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Updated Task"));
+    }
+
+    @Test
+    void testDeleteTask() throws Exception {
+        doNothing().when(taskService).deleteTask(1L);
+
+        mockMvc.perform(delete("/tasks/1"))
+                .andExpect(status().isOk());
+    }
+}
+
+
+         Interview questions
+         1.Unit testing → Testing individual methods/classes in isolation.
+         2.JUnit → A Java framework for writing and running unit tests.
+         3.Unit vs Integration → Unit = single component, Integration = multiple components together.
+         4.@Test → Marks a method as a test case in JUnit.
+         5.Test REST APIs → Use MockMvc or TestRestTemplate to simulate HTTP calls.
+         6.MockMvc → Spring tool to test controllers without starting the server.
+         7.Exceptions in JUnit → Use assertThrows(Exception.class, () -> method()).
+         8.Mocking → Creating fake objects to test code in isolation.
+         9.Failure scenarios → Use invalid input/mocks to simulate errors and assert results.          
+         10.Test coverage → Checked with tools like JaCoCo or EclEmma.
