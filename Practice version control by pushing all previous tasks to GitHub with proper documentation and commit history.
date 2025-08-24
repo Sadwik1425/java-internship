@@ -1,0 +1,11 @@
+Interview questions
+1.Git is a distributed version control system used to track changes in code and collaborate with others.
+2.Git manages version control locally, while GitHub is a cloud platform to host Git repositories online.
+3.Use git add <file> (stage) and git commit -m "message" (commit changes).
+4..gitignore specifies files/folders Git should ignore and not track.
+5.Create branch: git branch new-branch; switch branch: git checkout new-branch (or git switch new-branch).
+6.A merge conflict happens when two branches change the same code; resolve by editing conflicts manually and committing.
+7.git fetch downloads changes without merging, while git pull fetches + merges into your branch.
+8.Clone repo with: git clone <repo-url>.
+9.git reset moves HEAD to a previous commit (can remove history), while git revert makes a new commit that undoes changes safely.
+10.A commit message explains what and why changes were made, and should be clear, concise, and meaningful.
